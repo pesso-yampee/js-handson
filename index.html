@@ -8,14 +8,22 @@
     <title>TerraceTechフロントエンドエンジニア養成所</title>
   </head>
   <body>
-    <div>
-      <ul id="target"></ul>
-    </div>
+    <ul id="target"></ul>
   </body>
 </html>
 <script>
   const target = document.getElementById("target");
-  const li = document.createElement("li");
-  li.textContent = "これです";
-  target.append(li);
+  const link_texts = ["a1", "a2"];
+
+  for (let i = 0; i < link_texts.length; i++) {
+    const li = document.createElement("li");
+    const link = document.createElement("a");
+    const image = document.createElement("img");
+
+    link.href = `${link_texts[i]}.html`;
+    link.textContent = link_texts[i];
+    image.src = "/img/bookmark.png";
+    li.appendChild(link).appendChild(image);
+    target.append(li);
+  }
 </script>
