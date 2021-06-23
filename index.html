@@ -5,25 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <link rel="stylesheet" href="style.css" type="text/css" />
-    <title>TerraceTechフロントエンドエンジニア養成所</title>
+    <title>handson-4</title>
   </head>
   <body>
     <ul id="target"></ul>
   </body>
 </html>
 <script>
+  const item_list = [
+    {
+      to: "bookmark.html",
+      img: "1.png",
+      alt: "画像1",
+      text: "ブックマーク"
+    },
+    {
+      to: "message.html",
+      img: "2.png",
+      alt: "画像2",
+      text: "メッセージ"
+    }
+  ];
   const target = document.getElementById("target");
-  const link_texts = ["a1", "a2"];
 
-  for (let i = 0; i < link_texts.length; i++) {
+  let arr = [];
+
+  for (let i = 0; i < item_list.length; i++) {
     const li = document.createElement("li");
     const link = document.createElement("a");
     const image = document.createElement("img");
 
-    link.href = `${link_texts[i]}.html`;
-    link.textContent = link_texts[i];
-    image.src = "/img/bookmark.png";
+    link.href = `/${item_list[i].to}`;
+    link.textContent = `${item_list[i].text}`;
+    image.src = `${item_list[i].img}`;
+    image.alt = `${item_list[i].alt}`;
     li.appendChild(link).appendChild(image);
-    target.append(li);
+    arr.push(li);
   }
+
+  arr.forEach((item) => target.append(item));
 </script>
