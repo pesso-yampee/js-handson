@@ -5,54 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <link rel="stylesheet" href="style.css" type="text/css" />
-    <title>handson-7</title>
+    <title>handson-8</title>
   </head>
   <body>
     <ul id="target"></ul>
     <script>
       const target = document.getElementById("target");
-      const promiseObj = new Promise((resolve) => {
-        const list = [
-          {
-            to: "bookmark.html",
-            img: "1.png",
-            alt: "画像1",
-            text: "ブックマーク"
-          },
-          {
-            to: "message.html",
-            img: "2.png",
-            alt: "画像2",
-            text: "メッセージ"
-          }
-        ];
-        const loading = document.createElement("img");
+      const promiseObj = new Promise((resolve, reject) => {
+        // ローディング実行
+        const loadingImg = document.createElement("img");
 
-        loading.src = "loading-circle.gif";
-        target.prepend(loading);
+        loadingImg.src = "loading-circle.gif";
+        target.prepend(loadingImg);
 
+        // 3秒後に失敗したときの処理を実行する
         setTimeout(() => {
-          resolve(list);
+          reject(new Error("エラーが起きました。"));
         }, 3000);
       });
 
-      promiseObj.then((values) => {
-        const loading = document.querySelector("img");
-
-        values.forEach((value) => {
-          const li = document.createElement("li");
-          const link = document.createElement("a");
-          const image = document.createElement("img");
-
-          link.href = value.to;
-          link.textContent = value.text;
-          image.src = value.img;
-          image.alt = value.alt;
-          target.appendChild(li).appendChild(link).appendChild(image);
+      promiseObj
+        .then((value) => {
+          console.log(value);
+        })
+        .catch((error) => {
+          console.log(error);
         });
-
-        loading.remove();
-      });
     </script>
   </body>
 </html>
