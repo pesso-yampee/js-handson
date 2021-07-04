@@ -9,62 +9,6 @@
   </head>
   <body>
     <ul id="target"></ul>
-    <script>
-      const target = document.getElementById("target");
-
-      function addLoading() {
-        const loading = document.createElement("img");
-
-        loading.src = "loading-circle.gif";
-        loading.setAttribute("id", "loading");
-        target.prepend(loading);
-      }
-
-      async function asyncObj() {
-        return new Promise((resolve) => {
-          const list = [
-            {
-              to: "bookmark.html",
-              img: "1.png",
-              alt: "画像1",
-              text: "ブックマーク"
-            },
-            {
-              to: "message.html",
-              img: "2.png",
-              alt: "画像2",
-              text: "メッセージ"
-            }
-          ];
-
-          addLoading();
-
-          setTimeout(() => {
-            resolve(list);
-          }, 3000);
-        });
-      }
-
-      async function main() {
-        await asyncObj().then((values) => {
-          const loading = document.getElementById("loading");
-
-          values.forEach((value) => {
-            const li = document.createElement("li");
-            const link = document.createElement("a");
-            const image = document.createElement("img");
-
-            link.href = value.to;
-            link.textContent = value.text;
-            image.src = value.img;
-            image.alt = value.alt;
-            target.appendChild(li).appendChild(link).appendChild(image);
-          });
-
-          loading.remove();
-        });
-      }
-      main();
-    </script>
+    <script src="index.js"></script>
   </body>
 </html>
