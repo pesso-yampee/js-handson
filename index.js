@@ -1,18 +1,4 @@
 const target = document.getElementById("target");
-const data = [
-  {
-    to: "bookmark.html",
-    img: "1.png",
-    alt: "画像1",
-    text: "ブックマーク"
-  },
-  {
-    to: "message.html",
-    img: "2.png",
-    alt: "画像2",
-    text: "メッセージ"
-  }
-];
 
 function addLoadingGif(mark) {
   const loading = document.createElement("img");
@@ -43,9 +29,21 @@ function createList(lists) {
   });
 }
 
-// サーバー側に要求している
+async function fetchResource() {
+  const res = await fetch(
+    "https://jsondata.okiba.me/v1/json/xHouO210704011014"
+  );
+  const json = await res.json();
+  const resource = json.data;
+
+  return resource;
+}
+
+// サーバーにリクエスト
 async function request() {
   return new Promise((resolve) => {
+    const data = fetchResource();
+
     setTimeout(() => {
       resolve(data);
     }, 3000);
@@ -54,10 +52,11 @@ async function request() {
 
 async function fetchData() {
   let res = null;
+
   // 取得している間はローディング画像を表示
   addLoadingGif(target);
   try {
-    res = await request(); //名前変更
+    res = await request();
   } catch (error) {
     console.log(error);
   } finally {
