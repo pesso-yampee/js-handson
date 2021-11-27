@@ -34,13 +34,9 @@ function removeLoadingGif() {
 }
 
 async function requestServer() {
-  const json = await fetch(
-    "https://myjson.dit.upm.es/api/bins/2d47"
-  ).then((res) => res.json());
-
   return new Promise((resolve) => {
     setTimeout(function () {
-      resolve(json);
+      resolve(getJsonData());
     }, 3000);
   });
 }
@@ -59,3 +55,11 @@ async function fetchData() {
   }
 }
 fetchData();
+
+async function getJsonData() {
+  const json = await fetch(
+    "https://myjson.dit.upm.es/api/bins/2d47"
+  ).then((res) => res.json());
+
+  return json;
+}
