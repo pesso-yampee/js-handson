@@ -1,105 +1,61 @@
-const $target = document.getElementById("target");
+const fragment = document.createDocumentFragment();
+const target = document.getElementById("target");
 
-function createList(data, parent) {
-  const fragment = document.createDocumentFragment(); // DOMにまとめて追加するため
+function createList(list) {
+  list.data.forEach((item) => {
+    let li = document.createElement("li");
+    let link = document.createElement("a");
+    let image = document.createElement("img");
 
-  data.data.forEach((item) => {
-    const $li = document.createElement("li");
-    const $a = document.createElement("a");
-    const $img = document.createElement("img");
-    const $p = document.createElement("p");
+    link.textContent = item.text;
+    link.setAttribute("href", item.to);
+    image.src = item.img;
+    image.alt = item.alt;
 
-    $a.textContent = item.text;
-    $a.href = item.to;
-    $img.src = item.img;
-    $img.alt = item.alt;
-    $p.className = "picture";
-
-    $p.appendChild($img);
-    $li.appendChild($a);
-    $li.appendChild($p);
-    fragment.appendChild($li);
+    li.appendChild(link).appendChild(image);
+    fragment.appendChild(li);
   });
-
-  parent.appendChild(fragment);
+  target.appendChild(fragment);
 }
 
 function addLoadingGif() {
-  const $loadingGif = document.createElement("img");
-  const $body = document.querySelector("body");
+  const loadingGif = document.createElement("img");
+  const body = document.querySelector("body");
 
-  $loadingGif.src = "loading-circle.gif";
-  $loadingGif.alt = "loading-circle";
-  $loadingGif.id = "loading";
-  $body.appendChild($loadingGif);
+  loadingGif.id = "loading";
+  loadingGif.src = "loading-circle.gif";
+  body.appendChild(loadingGif);
 }
 
 function removeLoadingGif() {
-  const $loadingGif = document.getElementById("loading");
+  const loadingGif = document.getElementById("loading");
 
-  $loadingGif.remove();
+  loadingGif.remove();
 }
 
-function cretateRequestButton() {
-  const $button = document.createElement("div");
-  const $body = document.querySelector("body");
-
-  $button.id = "request";
-  $button.className = "btn__request";
-  $button.textContent = "リクエスト";
-  $body.appendChild($button);
-}
-cretateRequestButton();
-
-function removeRrequestButton() {
-  const $button = document.getElementById("request");
-
-  $button.remove();
-}
-// サーバーリクエスト
-async function request() {
-  const res = await fetch(
-    "https://jsondata.okiba.me/v1/json/xHouO210704011014"
-  );
-  const json = res.json(); //レスポンスのjsonを解析
+async function requestServer() {
+  const json = await fetch(
+    "https://myjson.dit.upm.es/api/bins/2d47"
+  ).then((res) => res.json());
 
   return new Promise((resolve) => {
-    setTimeout(() => {
+    setTimeout(function () {
       resolve(json);
     }, 3000);
   });
 }
 
-// サーバーから返ってきた情報を読み込む
 async function fetchData() {
-  let res = null;
-
+  addLoadingGif();
   try {
-    addLoadingGif(); //サーバーリクエスト中は回す
-    res = await request();
+    const res = await requestServer();
+    createList(res);
   } catch (error) {
-    console.log(new Error(error + "が発生しました"));
+    // 例外
+    console.log(error);
   } finally {
+    // いかなる場合でも実行される
     removeLoadingGif();
-    return res; //中身があろうがなかろうが返す
   }
 }
-
-// 初期化
-async function init() {
-  const fetch = await fetchData();
-
-  createList(fetch, $target);
-}
-
-// リクエストを実行
-function executeRequest() {
-  const requestButton = document.getElementById("request");
-  requestButton.addEventListener("click", function (e) {
-    e.preventDefault();
-    removeRrequestButton();
-    init();
-  });
-}
-
-executeRequest();
+fetchData();
