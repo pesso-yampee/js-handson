@@ -1,7 +1,7 @@
 {
-  "name": "qy2z2",
+  "name": "handson",
   "version": "1.0.0",
-  "description": "",
+  "description": "handsonの問題を解くディレクトリです。",
   "keywords": [],
   "main": "/index.html",
   "dependencies": {}
