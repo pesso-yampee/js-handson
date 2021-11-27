@@ -9,7 +9,7 @@ function createList(list) {
 
     link.textContent = item.text;
     link.setAttribute("href", item.to);
-    image.src = item.img;
+    image.src = "/img/"+item.img;
     image.alt = item.alt;
 
     li.appendChild(link).appendChild(image);
