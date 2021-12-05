@@ -37,15 +37,15 @@ requestBtn.addEventListener("click", async function () {
 function createList(list) {
   list.data.forEach((item) => {
     const li = document.createElement("li");
-    const link = document.createElement("a");
+    const anchor = document.createElement("a");
     const image = document.createElement("img");
 
-    link.textContent = item.text;
-    link.setAttribute("href", item.to);
+    anchor.textContent = item.text;
+    anchor.setAttribute("href", item.to);
     image.src = item.img;
     image.alt = item.alt;
 
-    li.appendChild(link).appendChild(image);
+    li.appendChild(anchor).appendChild(image);
     fragment.appendChild(li);
   });
   target.appendChild(fragment);
