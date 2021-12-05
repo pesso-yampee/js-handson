@@ -24,10 +24,14 @@ createRequestBtn();
 
 const requestBtn = document.getElementById("requestBtn");
 
-requestBtn.addEventListener("click", function () {
+// クリックした瞬間にwebサーバにリクエストをかけて、webサーバがDBサーバを見にいって。DBサーバからwebサーバに返答があって
+requestBtn.addEventListener("click", async function () {
   requestBtn.remove();
   firstDirectlyBelowBody.appendChild(loadingGif);
-  setTimeout(fetchJsonData, 3000);
+
+  const data = await fetchJsonData();
+
+  createList(data);
 });
 
 function createList(list) {
@@ -50,9 +54,10 @@ function createList(list) {
 async function fetchJsonData() {
   try {
     loadingGif.remove();
-    const res = await fetch("https://myjson.dit.upm.es/api/bins/2d47");
-    const json = await res.json();
-    createList(json);
+    const res = await fetch("https://myjson.dit.upm.es/api/bins/2d47").then(function (res) {
+      return res.json();
+    });
+    return res;
   } catch (error) {
     console.log(error);
   } finally {
