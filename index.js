@@ -2,13 +2,33 @@
 
 const fragment = document.createDocumentFragment();
 const target = document.getElementById("target");
-
 const loadingGif = document.createElement("img");
-const body = document.querySelector("body");
+const body = document.querySelectorAll("body");
+const firstDirectlyBelowBody = body.item(0); // body直下の1番目の要素
 
 loadingGif.className = "loading";
 loadingGif.src = "loading-circle.gif";
-body.appendChild(loadingGif);
+
+function createRequestBtn() {
+  const button = document.createElement("div");
+  const text = document.createElement("p");
+
+  button.className = "requestBtn";
+  button.id = "requestBtn";
+  text.className = "requestBtn__text";
+  text.textContent = "Request!";
+  button.appendChild(text);
+  firstDirectlyBelowBody.appendChild(button);
+}
+createRequestBtn();
+
+const requestBtn = document.getElementById("requestBtn");
+
+requestBtn.addEventListener("click", function () {
+  requestBtn.remove();
+  firstDirectlyBelowBody.appendChild(loadingGif);
+  setTimeout(fetchJsonData, 3000);
+});
 
 function createList(list) {
   list.data.forEach((item) => {
@@ -27,7 +47,7 @@ function createList(list) {
   target.appendChild(fragment);
 }
 
-async function getJsonData() {
+async function fetchJsonData() {
   try {
     loadingGif.remove();
     const res = await fetch("https://myjson.dit.upm.es/api/bins/2d47");
@@ -36,7 +56,6 @@ async function getJsonData() {
   } catch (error) {
     console.log(error);
   } finally {
-    console.log("getJsonData run");
+    console.log("fetchJsonData run");
   }
 }
-setTimeout(getJsonData, 3000);
