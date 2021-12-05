@@ -1,11 +1,20 @@
+'use strict';
+
 const fragment = document.createDocumentFragment();
 const target = document.getElementById("target");
 
+const loadingGif = document.createElement("img");
+const body = document.querySelector("body");
+
+loadingGif.className = "loading";
+loadingGif.src = "loading-circle.gif";
+body.appendChild(loadingGif);
+
 function createList(list) {
   list.data.forEach((item) => {
-    let li = document.createElement("li");
-    let link = document.createElement("a");
-    let image = document.createElement("img");
+    const li = document.createElement("li");
+    const link = document.createElement("a");
+    const image = document.createElement("img");
 
     link.textContent = item.text;
     link.setAttribute("href", item.to);
@@ -18,44 +27,16 @@ function createList(list) {
   target.appendChild(fragment);
 }
 
-function addLoadingGif() {
-  const loadingGif = document.createElement("img");
-  const body = document.querySelector("body");
-
-  loadingGif.id = "loading";
-  loadingGif.src = "loading-circle.gif";
-  body.appendChild(loadingGif);
-}
-
-function removeLoadingGif() {
-  const loadingGif = document.getElementById("loading");
-
-  loadingGif.remove();
-}
-
-async function requestServer() {
-  const json = await fetch(
-    "https://myjson.dit.upm.es/api/bins/2d47"
-  ).then((res) => res.json());
-
-  return new Promise((resolve) => {
-    setTimeout(function () {
-      resolve(json);
-    }, 3000);
-  });
-}
-
-async function fetchData() {
-  addLoadingGif();
+async function getJsonData() {
   try {
-    const res = await requestServer();
-    createList(res);
+    loadingGif.remove();
+    const res = await fetch("https://myjson.dit.upm.es/api/bins/2d47");
+    const json = await res.json();
+    createList(json);
   } catch (error) {
-    // 例外
     console.log(error);
   } finally {
-    // いかなる場合でも実行される
-    removeLoadingGif();
+    console.log("getJsonData run");
   }
 }
-fetchData();
+setTimeout(getJsonData, 3000);
