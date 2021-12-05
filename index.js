@@ -53,14 +53,15 @@ function createList(list) {
 
 async function fetchJsonData() {
   try {
-    loadingGif.remove();
-    const res = await fetch("https://myjson.dit.upm.es/api/bins/2d47").then(function (res) {
-      return res.json();
-    });
+    const res = await fetch("https://myjson.dit.upm.es/api/bins/2d47").then(
+      function (res) {
+        return res.json();
+      }
+    );
     return res;
   } catch (error) {
     console.log(error);
   } finally {
-    console.log("fetchJsonData run");
+    loadingGif.remove();
   }
 }
