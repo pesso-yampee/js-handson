@@ -22,7 +22,7 @@
 
   function createButton(name) {
     const button = document.createElement("div");
-    const text = document.createElement("p");
+    const text   = document.createElement("p");
 
     button.className = `${name}Btn`;
     button.id        = `${name}Btn`;
