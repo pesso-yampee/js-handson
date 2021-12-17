@@ -73,7 +73,7 @@
     removeButton(modalBtn);
     firstDirectlyBelowBody.appendChild(loadingGif);
 
-    const data = await fetchJsonData();
+    const data = await postData();
 
     createList(data);
   });
@@ -98,7 +98,7 @@
     target.appendChild(fragment);
   }
 
-  async function fetchJsonData() {
+  async function postData() {
     try {
       const res = await fetch("https://myjson.dit.upm.es/api/bins/2d47").then(
         function (res) {
