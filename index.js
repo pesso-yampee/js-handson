@@ -10,6 +10,12 @@
   });
   createLoadingGif();
 
+  const loadingGif = document.getElementById("loading");
+
+  function addLoadingGif(gif) {
+    firstDirectlyBelowBody.appendChild(gif);
+  }
+
   const createModalWindow = (function() {
     const modal = document.createElement("div");
     const inner = document.createElement("div");
@@ -30,7 +36,7 @@
   }
 
   function hiddenModalWindow(window) {
-    window.classList.add("js-active");
+    window.classList.remove("js-active");
   }
 
   function createButton(name, window = null) {
@@ -64,14 +70,11 @@
   const requestBtn  = document.getElementById("requestBtn");
 
   modalBtn.addEventListener("click", showModalWindow(modalWindow));
-
   modalWindow.addEventListener("click", hiddenModalWindow(modalWindow));
-
-  // クリックした瞬間にwebサーバにリクエストをかけて、webサーバがDBサーバを見にいって。DBサーバからwebサーバに返答があって
   requestBtn.addEventListener("click", async function () {
     removeButton(requestBtn);
     removeButton(modalBtn);
-    firstDirectlyBelowBody.appendChild(loadingGif);
+    addLoadingGif(loadingGif);
 
     const data = await postData();
 
