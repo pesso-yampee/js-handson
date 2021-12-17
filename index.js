@@ -1,14 +1,16 @@
 (function () {
-  const fragment               = document.createDocumentFragment();
-  const target                 = document.getElementById("target");
-  const loadingGif             = document.createElement("img");
   const body                   = document.querySelectorAll("body");
   const firstDirectlyBelowBody = body.item(0); // body直下の1番目の要素
 
-  loadingGif.className = "loading";
-  loadingGif.src       = "loading-circle.gif";
+  const createLoadingGif = (function() {
+    const loadingGif = document.createElement("img");
 
-  function createModalWindow() {
+    loadingGif.className = "loading";
+    loadingGif.src       = "loading-circle.gif";
+  });
+  createLoadingGif();
+
+  const createModalWindow = (function() {
     const modal = document.createElement("div");
     const inner = document.createElement("div");
 
@@ -18,11 +20,22 @@
     inner.id        = "modalWindowInner";
     modal.appendChild(inner);
     firstDirectlyBelowBody.appendChild(modal);
+  });
+  createModalWindow();
+
+  const modalWindow = document.getElementById("modalWindow");
+
+  function showModalWindow(window) {
+    window.classList.add("js-active");
   }
 
-  function createButton(name) {
+  function hiddenModalWindow(window) {
+    window.classList.add("js-active");
+  }
+
+  function createButton(name, window = null) {
     const button = document.createElement("div");
-    const text = document.createElement("p");
+    const text   = document.createElement("p");
 
     button.className = `${name}Btn`;
     button.id        = `${name}Btn`;
@@ -33,42 +46,42 @@
     if (name === "modal") {
       firstDirectlyBelowBody.appendChild(button);
     } else if (name === "request") {
-      const modalWindow      = document.getElementById("modalWindow");
       const modalWindowInner = document.getElementById("modalWindowInner");
 
       modalWindowInner.insertAdjacentElement("beforeend", button);
-      modalWindow.insertAdjacentElement("beforeend", modalWindowInner);
+      window.insertAdjacentElement("beforeend", modalWindowInner);
     }
   }
 
-  createModalWindow();
+  function removeButton(btn) {
+    btn.remove();
+  }
+
   createButton("modal");
-  createButton("request");
+  createButton("request", modalWindow);
 
   const modalBtn    = document.getElementById("modalBtn");
   const requestBtn  = document.getElementById("requestBtn");
-  const modalWindow = document.getElementById("modalWindow");
 
-  modalBtn.addEventListener("click", function () {
-    modalWindow.classList.add("js-active");
-  });
+  modalBtn.addEventListener("click", showModalWindow(modalWindow));
 
-  modalWindow.addEventListener("click", function () {
-    modalWindow.classList.remove("js-active");
-  });
+  modalWindow.addEventListener("click", hiddenModalWindow(modalWindow));
 
   // クリックした瞬間にwebサーバにリクエストをかけて、webサーバがDBサーバを見にいって。DBサーバからwebサーバに返答があって
   requestBtn.addEventListener("click", async function () {
-    requestBtn.remove();
-    modalBtn.remove();
+    removeButton(requestBtn);
+    removeButton(modalBtn);
     firstDirectlyBelowBody.appendChild(loadingGif);
 
-    const data = await fetchJsonData();
+    const data = await postData();
 
     createList(data);
   });
 
   function createList(list) {
+    const fragment = document.createDocumentFragment();
+    const target   = document.getElementById("target");
+
     list.data.forEach((item) => {
       const li     = document.createElement("li");
       const anchor = document.createElement("a");
@@ -85,7 +98,7 @@
     target.appendChild(fragment);
   }
 
-  async function fetchJsonData() {
+  async function postData() {
     try {
       const res = await fetch("https://myjson.dit.upm.es/api/bins/2d47").then(
         function (res) {
@@ -99,4 +112,4 @@
       loadingGif.remove();
     }
   }
-})();
+}());
