@@ -2,13 +2,20 @@
   const body                   = document.querySelectorAll("body");
   const firstDirectlyBelowBody = body.item(0); // body直下の1番目の要素
 
-  const createLoadingGif = (function() {
+  const createLoadingGif = (function () {
     const loadingGif = document.createElement("img");
 
     loadingGif.className = "loading";
-    loadingGif.src       = "loading-circle.gif";
-  });
-  createLoadingGif();
+    loadingGif.id = "loading";
+    loadingGif.src = "loading-circle.gif";
+
+    return loadingGif;
+  })();
+  const loadingGif = createLoadingGif;
+
+  function addLoadingGif(gif) {
+    firstDirectlyBelowBody.appendChild(gif);
+  }
 
   const createModalWindow = (function() {
     const modal = document.createElement("div");
@@ -20,8 +27,7 @@
     inner.id        = "modalWindowInner";
     modal.appendChild(inner);
     firstDirectlyBelowBody.appendChild(modal);
-  });
-  createModalWindow();
+  }());
 
   const modalWindow = document.getElementById("modalWindow");
 
@@ -30,7 +36,7 @@
   }
 
   function hiddenModalWindow(window) {
-    window.classList.add("js-active");
+    window.classList.remove("js-active");
   }
 
   function createButton(name, window = null) {
@@ -63,17 +69,18 @@
   const modalBtn    = document.getElementById("modalBtn");
   const requestBtn  = document.getElementById("requestBtn");
 
-  modalBtn.addEventListener("click", showModalWindow(modalWindow));
-
-  modalWindow.addEventListener("click", hiddenModalWindow(modalWindow));
-
-  // クリックした瞬間にwebサーバにリクエストをかけて、webサーバがDBサーバを見にいって。DBサーバからwebサーバに返答があって
+  modalBtn.addEventListener("click", function() {
+    showModalWindow(modalWindow);
+  });
+  modalWindow.addEventListener("click", function() {
+    hiddenModalWindow(modalWindow);
+  });
   requestBtn.addEventListener("click", async function () {
     removeButton(requestBtn);
     removeButton(modalBtn);
-    firstDirectlyBelowBody.appendChild(loadingGif);
+    addLoadingGif(loadingGif);
 
-    const data = await fetchJsonData();
+    const data = await postData(loadingGif);
 
     createList(data);
   });
@@ -98,7 +105,7 @@
     target.appendChild(fragment);
   }
 
-  async function fetchJsonData() {
+  async function postData(gif) {
     try {
       const res = await fetch("https://myjson.dit.upm.es/api/bins/2d47").then(
         function (res) {
@@ -109,7 +116,7 @@
     } catch (error) {
       console.log(error);
     } finally {
-      loadingGif.remove();
+      gif.remove();
     }
   }
 }());
