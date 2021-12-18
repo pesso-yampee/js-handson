@@ -2,15 +2,16 @@
   const body                   = document.querySelectorAll("body");
   const firstDirectlyBelowBody = body.item(0); // body直下の1番目の要素
 
-  const createLoadingGif = (function() {
+  const createLoadingGif = (function () {
     const loadingGif = document.createElement("img");
 
     loadingGif.className = "loading";
-    loadingGif.src       = "loading-circle.gif";
-  });
-  createLoadingGif();
+    loadingGif.id = "loading";
+    loadingGif.src = "loading-circle.gif";
 
-  const loadingGif = document.getElementById("loading");
+    return loadingGif;
+  })();
+  const loadingGif = createLoadingGif;
 
   function addLoadingGif(gif) {
     firstDirectlyBelowBody.appendChild(gif);
@@ -26,8 +27,7 @@
     inner.id        = "modalWindowInner";
     modal.appendChild(inner);
     firstDirectlyBelowBody.appendChild(modal);
-  });
-  createModalWindow();
+  }());
 
   const modalWindow = document.getElementById("modalWindow");
 
@@ -69,14 +69,18 @@
   const modalBtn    = document.getElementById("modalBtn");
   const requestBtn  = document.getElementById("requestBtn");
 
-  modalBtn.addEventListener("click", showModalWindow(modalWindow));
-  modalWindow.addEventListener("click", hiddenModalWindow(modalWindow));
+  modalBtn.addEventListener("click", function() {
+    showModalWindow(modalWindow);
+  });
+  modalWindow.addEventListener("click", function() {
+    hiddenModalWindow(modalWindow);
+  });
   requestBtn.addEventListener("click", async function () {
     removeButton(requestBtn);
     removeButton(modalBtn);
     addLoadingGif(loadingGif);
 
-    const data = await postData();
+    const data = await postData(loadingGif);
 
     createList(data);
   });
@@ -101,7 +105,7 @@
     target.appendChild(fragment);
   }
 
-  async function postData() {
+  async function postData(gif) {
     try {
       const res = await fetch("https://myjson.dit.upm.es/api/bins/2d47").then(
         function (res) {
@@ -112,7 +116,7 @@
     } catch (error) {
       console.log(error);
     } finally {
-      loadingGif.remove();
+      gif.remove();
     }
   }
 }());
