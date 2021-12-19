@@ -25,6 +25,9 @@ body {
   height: auto;
 }
 
+/* ------------------
+  BUTTON
+-------------------*/
 .requestBtn,
 .modalBtn {
   display: inline-block;
@@ -44,28 +47,82 @@ body {
   margin-left: 20px;
 }
 
-.modal {
-  z-index: 100;
+/* ------------------
+  OVERLAY
+-------------------*/
+.overlay {
+  z-index: 99;
   position: fixed;
+  display: none;
   top: 0;
   left: 0;
-  display: none;
   width: 100%;
   height: 100%;
-  /* スマホ対策 */
-  background-color: rgba(0, 0, 0, 0.7);
-  transition: display 0.5s linear;
+  background-color: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
+  animation: overlayShow .3s linear 0s;
+}
+.overlay.js-show {
+  display: block;
+}
+
+/* ------------------
+  MODAL
+-------------------*/
+.modal__window {
+  z-index: 100;
+  position: fixed;
+  display: none;
+  top: 50%;
+  left: 50%;
+  background-color: #fff;
+  transform: translate(-50%, -50%);
+  animation: modalShow .3s linear 0s;
+}
+
+.modal__window.js-show {
+  display: block;
 }
 
 .modal__inner {
-  padding: 10px;
-  transform: translateY(-50%);
-}
-
-.js-active {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: 30px;
+}
+
+.modal__input {
+  margin-bottom: 10px;
+}
+
+.modal__closeBtn {
+  border-color: #808080;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.modal__closeBtn__line {
+  
+}
+/* ------------------
+  ANIMATION
+-------------------*/
+@keyframes overlayShow {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: .8;
+  }
+}
+@keyframes modalShow {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
