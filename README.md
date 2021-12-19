@@ -1,2 +1,2 @@
 # js-handson
-Created with CodeSandbox
+https://github.com/kenmori/handsonFrontend/blob/master/work/markup/1.md

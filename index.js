@@ -10,9 +10,6 @@
   const body                   = document.querySelectorAll("body");
   const firstDirectlyBelowBody = body.item(0); // body直下の1番目の要素
 
-  loadingGif.className = "loading";
-  loadingGif.src       = "loading-circle.gif";
-
   function createMainContent(body) {
     const div = document.createElement("div");
 
@@ -68,7 +65,7 @@
 
   function createButton(name, content = null) {
     const button = document.createElement("div");
-    const text = document.createElement("p");
+    const text   = document.createElement("p");
 
     button.className = `${name}Btn`;
     button.id        = `${name}Btn`;
@@ -79,13 +76,13 @@
     if (name === "modal") {
       content.insertAdjacentElement("afterend", button);
     } else if (name === "request") {
-      const modalWindow      = document.getElementById("modalWindow");
       const modalWindowInner = document.getElementById("modalWindowInner");
 
       modalWindowInner.insertAdjacentElement("beforeend", button);
-      modalWindow.insertAdjacentElement("beforeend", modalWindowInner);
+      window.insertAdjacentElement("beforeend", modalWindowInner);
     }
   }
+
   createButton("modal", mainContent);
   createButton("request");
 
