@@ -1,3 +1,8 @@
+// 13で作ったモーダル内にinput (typeはnumber)をおいて、
+// クリックした際にinput(type number)のvalueを取得して、
+// リクエストできるようにしてください。
+// (その値はPromiseを実行する手前でconsole.log出力されていればいいです)
+
 (function () {
   const fragment               = document.createDocumentFragment();
   const target                 = document.getElementById("target");
@@ -8,19 +13,60 @@
   loadingGif.className = "loading";
   loadingGif.src       = "loading-circle.gif";
 
-  function createModalWindow() {
+  function createMainContent(body) {
+    const div = document.createElement("div");
+
+    div.className = "main__content";
+    div.id = "mainContent";
+    body.insertAdjacentElement("afterbegin", div);
+  }
+  createMainContent(firstDirectlyBelowBody);
+
+  const mainContent = document.getElementById("mainContent");
+
+  mainContent.appendChild(target);
+
+  function createModal(content) {
     const modal = document.createElement("div");
+    const window = document.createElement("div");
     const inner = document.createElement("div");
 
     modal.className = "modal";
-    modal.id        = "modalWindow";
+    modal.id = "modal";
+    window.className = "modal__window";
+    window.id        = "modalWindow";
     inner.className = "modal__inner";
     inner.id        = "modalWindowInner";
-    modal.appendChild(inner);
-    firstDirectlyBelowBody.appendChild(modal);
-  }
+    window.appendChild(inner);
+    modal.appendChild(window);
+    modal.appendChild(closeBtn);
 
-  function createButton(name) {
+    function createModalCloseButton() {
+      const btn = document.createElement("div");
+      const inner = document.createElement("div");
+      const line1 = document.createElement("span");
+      const line2 = document.createElement("span");
+
+      btn.className = "modal__closeBtn";
+      btn.id = "modalCloseBtn";
+      inner.className = " modal__closeBtn__inner";
+      inner.id = " modalCloseBtnInner";
+      line1.className = "modal__closeBtn__line";
+      line1.id = "modalCloseBtnLine";
+      line2.className = "modal__closeBtn__line";
+      line2.id = "modalCloseBtnLine";
+      inner.appendChild(line1);
+      inner.appendChild(line2);
+      btn.appendChild(inner);
+      modal.appendChild(btn);
+    }
+    createModalCloseButton();
+
+    content.insertAdjacentElement("afterend", modal);
+  }
+  createModal(mainContent);
+
+  function createButton(name, content = null) {
     const button = document.createElement("div");
     const text = document.createElement("p");
 
@@ -31,7 +77,7 @@
     button.appendChild(text);
 
     if (name === "modal") {
-      firstDirectlyBelowBody.appendChild(button);
+      content.insertAdjacentElement("afterend", button);
     } else if (name === "request") {
       const modalWindow      = document.getElementById("modalWindow");
       const modalWindowInner = document.getElementById("modalWindowInner");
@@ -40,39 +86,65 @@
       modalWindow.insertAdjacentElement("beforeend", modalWindowInner);
     }
   }
-
-  createModalWindow();
-  createButton("modal");
+  createButton("modal", mainContent);
   createButton("request");
 
-  const modalBtn    = document.getElementById("modalBtn");
-  const requestBtn  = document.getElementById("requestBtn");
-  const modalWindow = document.getElementById("modalWindow");
+  const modalBtn         = document.getElementById("modalBtn");
+  const requestBtn       = document.getElementById("requestBtn");
+  const modalWindow      = document.getElementById("modalWindow");
+  const modalWindowInner = document.getElementById("modalWindowInner");
 
-  modalBtn.addEventListener("click", function () {
-    modalWindow.classList.add("js-active");
-  });
+  function createInput(inner) {
+    const input = document.createElement("input");
 
-  modalWindow.addEventListener("click", function () {
-    modalWindow.classList.remove("js-active");
-  });
+    input.className = "modal__input";
+    input.id = "number";
+    input.setAttribute("type", "number");
+    input.setAttribute("value", "");
+    inner.insertAdjacentElement("afterbegin", input);
+  };
+  createInput(modalWindowInner);
 
-  // クリックした瞬間にwebサーバにリクエストをかけて、webサーバがDBサーバを見にいって。DBサーバからwebサーバに返答があって
-  requestBtn.addEventListener("click", async function () {
-    requestBtn.remove();
-    modalBtn.remove();
-    firstDirectlyBelowBody.appendChild(loadingGif);
+  const modal__input = document.getElementById("number");
 
-    const data = await fetchJsonData();
+  function createOverlay(content) {
+    const div = document.createElement("div");
 
-    createList(data);
-  });
+    div.className = "overlay";
+    div.id = "overlay";
+    content.insertAdjacentElement("afterend", div);
+  }
+  createOverlay(mainContent);
 
-  function createList(list) {
+  const overlay = document.getElementById("overlay");
+
+  function getInputValue(area) {
+    const value = area.value;
+
+    console.log(value);
+  }
+
+  function show(object) {
+    object.classList.add("js-show");
+  }
+
+  function hidden(object) {
+    object.classList.remove("js-show");
+  }
+
+  function removeButton(btn) {
+    btn.remove();
+  }
+
+  function addLoadingGif(gif, content) {
+    content.insertAdjacentElement("afterend", gif);
+  }
+
+  function createList(list, frag) {
     list.data.forEach((item) => {
-      const li     = document.createElement("li");
+      const li = document.createElement("li");
       const anchor = document.createElement("a");
-      const image  = document.createElement("img");
+      const image = document.createElement("img");
 
       anchor.textContent = item.text;
       anchor.setAttribute("href", item.to);
@@ -80,12 +152,12 @@
       image.alt = item.alt;
 
       li.appendChild(anchor).appendChild(image);
-      fragment.appendChild(li);
+      frag.appendChild(li);
     });
-    target.appendChild(fragment);
+    target.appendChild(frag);
   }
 
-  async function fetchJsonData() {
+  async function postData(gif) {
     try {
       const res = await fetch("https://myjson.dit.upm.es/api/bins/2d47").then(
         function (res) {
@@ -96,7 +168,35 @@
     } catch (error) {
       console.log(error);
     } finally {
-      loadingGif.remove();
+      gif.remove();
     }
   }
+
+  modalBtn.addEventListener("click", function () {
+    show(overlay);
+    show(modalWindow);
+  });
+
+  modalCloseBtn.addEventListener("click", function () {
+    hidden(overlay);
+    hidden(modalWindow);
+  });
+
+  overlay.addEventListener("click", function () {
+    hidden(overlay);
+    hidden(modalWindow);
+  });
+
+  requestBtn.addEventListener("click", async function () {
+    removeButton(requestBtn);
+    removeButton(modalBtn);
+    hidden(overlay);
+    hidden(modalWindow);
+    getInputValue(modal__input);
+    addLoadingGif(loadingGif, mainContent);
+
+    const data = await postData(loadingGif);
+
+    createList(data, fragment);
+  });
 })();
