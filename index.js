@@ -39,32 +39,21 @@
     inner.id        = "modalWindowInner";
     window.appendChild(inner);
     modal.appendChild(window);
-    modal.appendChild(closeBtn);
 
-    function createModalCloseButton() {
+    function closeButton() {
       const btn = document.createElement("div");
-      const inner = document.createElement("div");
-      const line1 = document.createElement("span");
-      const line2 = document.createElement("span");
 
       btn.className = "modal__closeBtn";
       btn.id = "modalCloseBtn";
-      inner.className = " modal__closeBtn__inner";
-      inner.id = " modalCloseBtnInner";
-      line1.className = "modal__closeBtn__line";
-      line1.id = "modalCloseBtnLine";
-      line2.className = "modal__closeBtn__line";
-      line2.id = "modalCloseBtnLine";
-      inner.appendChild(line1);
-      inner.appendChild(line2);
-      btn.appendChild(inner);
       modal.appendChild(btn);
     }
-    createModalCloseButton();
+    closeButton();
 
     content.insertAdjacentElement("afterend", modal);
   }
   createModal(mainContent);
+
+  const modalCloseBtn = document.getElementById("modalCloseBtn");
 
   function createButton(name, content = null) {
     const button = document.createElement("div");
@@ -91,7 +80,7 @@
 
   const modalBtn         = document.getElementById("modalBtn");
   const requestBtn       = document.getElementById("requestBtn");
-  const modalWindow      = document.getElementById("modalWindow");
+  const modal            = document.getElementById("modal");
   const modalWindowInner = document.getElementById("modalWindowInner");
 
   function createInput(inner) {
@@ -174,24 +163,24 @@
 
   modalBtn.addEventListener("click", function () {
     show(overlay);
-    show(modalWindow);
+    show(modal);
   });
 
   modalCloseBtn.addEventListener("click", function () {
     hidden(overlay);
-    hidden(modalWindow);
+    hidden(modal);
   });
 
   overlay.addEventListener("click", function () {
     hidden(overlay);
-    hidden(modalWindow);
+    hidden(modal);
   });
 
   requestBtn.addEventListener("click", async function () {
     removeButton(requestBtn);
     removeButton(modalBtn);
     hidden(overlay);
-    hidden(modalWindow);
+    hidden(modal);
     getInputValue(modal__input);
     addLoadingGif(loadingGif, mainContent);
 
