@@ -10,6 +10,10 @@
   const body                   = document.querySelectorAll("body");
   const firstDirectlyBelowBody = body.item(0); // body直下の1番目の要素
 
+  loadingGif.id = "loadingGif";
+  loadingGif.className = "img__loading-circle";
+  loadingGif.src = "./loading-circle.gif";
+
   function createMainContent(body) {
     const div = document.createElement("div");
 
@@ -25,17 +29,13 @@
 
   function createModal(content) {
     const modal = document.createElement("div");
-    const window = document.createElement("div");
     const inner = document.createElement("div");
 
     modal.className = "modal";
     modal.id = "modal";
-    window.className = "modal__window";
-    window.id        = "modalWindow";
     inner.className = "modal__inner";
-    inner.id        = "modalWindowInner";
-    window.appendChild(inner);
-    modal.appendChild(window);
+    inner.id        = "modalInner";
+    modal.appendChild(inner);
 
     function closeButton() {
       const btn = document.createElement("div");
@@ -50,9 +50,11 @@
   }
   createModal(mainContent);
 
+  const modal = document.getElementById("modal");
+  const modalInner = document.getElementById("modalInner");
   const modalCloseBtn = document.getElementById("modalCloseBtn");
 
-  function createButton(name, content = null) {
+  function createButton(name, inner = null, content = null) {
     const button = document.createElement("div");
     const text   = document.createElement("p");
 
@@ -65,20 +67,15 @@
     if (name === "modal") {
       content.insertAdjacentElement("afterend", button);
     } else if (name === "request") {
-      const modalWindowInner = document.getElementById("modalWindowInner");
-
-      modalWindowInner.insertAdjacentElement("beforeend", button);
-      window.insertAdjacentElement("beforeend", modalWindowInner);
+      inner.insertAdjacentElement("beforeend", button);
     }
   }
 
-  createButton("modal", mainContent);
-  createButton("request");
+  createButton("modal", null, mainContent);
+  createButton("request", modalInner);
 
-  const modalBtn         = document.getElementById("modalBtn");
-  const requestBtn       = document.getElementById("requestBtn");
-  const modal            = document.getElementById("modal");
-  const modalWindowInner = document.getElementById("modalWindowInner");
+  const modalBtn   = document.getElementById("modalBtn");
+  const requestBtn = document.getElementById("requestBtn");
 
   function createInput(inner) {
     const input = document.createElement("input");
@@ -89,7 +86,7 @@
     input.setAttribute("value", "");
     inner.insertAdjacentElement("afterbegin", input);
   };
-  createInput(modalWindowInner);
+  createInput(modalInner);
 
   const modal__input = document.getElementById("number");
 

@@ -71,16 +71,13 @@ body {
   display: none;
   top: 50%;
   left: 50%;
+  background-color: #fff;
   transform: translate(-50%, -50%);
   animation: modalShow .3s linear 0s;
 }
 
 .modal.js-show {
   display: block;
-}
-
-.modal__window {
-  background-color: #fff;
 }
 
 .modal__inner {
