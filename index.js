@@ -10,6 +10,10 @@
   const body                   = document.querySelectorAll("body");
   const firstDirectlyBelowBody = body.item(0); // body直下の1番目の要素
 
+  loadingGif.id = "loadingGif";
+  loadingGif.className = "img__loading-circle";
+  loadingGif.src = "./loading-circle.gif";
+
   function createMainContent(body) {
     const div = document.createElement("div");
 
@@ -25,45 +29,32 @@
 
   function createModal(content) {
     const modal = document.createElement("div");
-    const window = document.createElement("div");
     const inner = document.createElement("div");
 
     modal.className = "modal";
     modal.id = "modal";
-    window.className = "modal__window";
-    window.id        = "modalWindow";
     inner.className = "modal__inner";
-    inner.id        = "modalWindowInner";
-    window.appendChild(inner);
-    modal.appendChild(window);
-    modal.appendChild(closeBtn);
+    inner.id        = "modalInner";
+    modal.appendChild(inner);
 
-    function createModalCloseButton() {
+    function closeButton() {
       const btn = document.createElement("div");
-      const inner = document.createElement("div");
-      const line1 = document.createElement("span");
-      const line2 = document.createElement("span");
 
       btn.className = "modal__closeBtn";
       btn.id = "modalCloseBtn";
-      inner.className = " modal__closeBtn__inner";
-      inner.id = " modalCloseBtnInner";
-      line1.className = "modal__closeBtn__line";
-      line1.id = "modalCloseBtnLine";
-      line2.className = "modal__closeBtn__line";
-      line2.id = "modalCloseBtnLine";
-      inner.appendChild(line1);
-      inner.appendChild(line2);
-      btn.appendChild(inner);
       modal.appendChild(btn);
     }
-    createModalCloseButton();
+    closeButton();
 
     content.insertAdjacentElement("afterend", modal);
   }
   createModal(mainContent);
 
-  function createButton(name, content = null) {
+  const modal = document.getElementById("modal");
+  const modalInner = document.getElementById("modalInner");
+  const modalCloseBtn = document.getElementById("modalCloseBtn");
+
+  function createButton(name, inner = null, content = null) {
     const button = document.createElement("div");
     const text   = document.createElement("p");
 
@@ -76,20 +67,15 @@
     if (name === "modal") {
       content.insertAdjacentElement("afterend", button);
     } else if (name === "request") {
-      const modalWindowInner = document.getElementById("modalWindowInner");
-
-      modalWindowInner.insertAdjacentElement("beforeend", button);
-      window.insertAdjacentElement("beforeend", modalWindowInner);
+      inner.insertAdjacentElement("beforeend", button);
     }
   }
 
-  createButton("modal", mainContent);
-  createButton("request");
+  createButton("modal", null, mainContent);
+  createButton("request", modalInner);
 
-  const modalBtn         = document.getElementById("modalBtn");
-  const requestBtn       = document.getElementById("requestBtn");
-  const modalWindow      = document.getElementById("modalWindow");
-  const modalWindowInner = document.getElementById("modalWindowInner");
+  const modalBtn   = document.getElementById("modalBtn");
+  const requestBtn = document.getElementById("requestBtn");
 
   function createInput(inner) {
     const input = document.createElement("input");
@@ -100,7 +86,7 @@
     input.setAttribute("value", "");
     inner.insertAdjacentElement("afterbegin", input);
   };
-  createInput(modalWindowInner);
+  createInput(modalInner);
 
   const modal__input = document.getElementById("number");
 
@@ -171,24 +157,24 @@
 
   modalBtn.addEventListener("click", function () {
     show(overlay);
-    show(modalWindow);
+    show(modal);
   });
 
   modalCloseBtn.addEventListener("click", function () {
     hidden(overlay);
-    hidden(modalWindow);
+    hidden(modal);
   });
 
   overlay.addEventListener("click", function () {
     hidden(overlay);
-    hidden(modalWindow);
+    hidden(modal);
   });
 
   requestBtn.addEventListener("click", async function () {
     removeButton(requestBtn);
     removeButton(modalBtn);
     hidden(overlay);
-    hidden(modalWindow);
+    hidden(modal);
     getInputValue(modal__input);
     addLoadingGif(loadingGif, mainContent);
 
