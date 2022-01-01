@@ -1,8 +1,4 @@
-// 13で作ったモーダル内にinput (typeはnumber)をおいて、
-// クリックした際にinput(type number)のvalueを取得して、
-// リクエストできるようにしてください。
-// (その値はPromiseを実行する手前でconsole.log出力されていればいいです)
-
+// モーダル内に formをおいて、input(type number)値、input(type text)、を新たに作ったsubmitボタン押下で リクエスト、 APIから値を取ってきてください
 (function () {
   const fragment               = document.createDocumentFragment();
   const target                 = document.getElementById("target");
