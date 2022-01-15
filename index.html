@@ -9,6 +9,25 @@
   </head>
   <body>
     <ul class="list" id="target"></ul>
+
+    <div class="overlay" id="js-overlay"></div>
+    <div class="form" id="js-form">
+      <div class="form__inner">
+        <form class="form__body" action="#" method="post">
+          <p class="form__head">ログイン</p>
+          <dl>
+            <dt><label for="name">名前</label></dt>
+            <dd><input type="text"></dd>
+          </dl>
+          <dl>
+            <dt><label for="password">パスワード</label></dt>
+            <dd><input type="password"></dd>
+          </dl>
+        </form>
+        <!-- 画面前更新を発生させないためには送信ボタンをformの外側に書く -->
+        <button class="form__btn--submit" id="js-submit" type="submit">送信</button>
+      </div><!-- ./form__inner -->
+    </div><!-- ./form -->
     <script src="./index.js"></script>
   </body>
 </html>

@@ -1,10 +1,13 @@
 // モーダル内に formをおいて、input(type number)値、input(type text)、を新たに作ったsubmitボタン押下で リクエスト、 APIから値を取ってきてください
 (function () {
-  const fragment               = document.createDocumentFragment();
-  const target                 = document.getElementById("target");
-  const loadingGif             = document.createElement("img");
-  const body                   = document.querySelectorAll("body");
+  const fragment = document.createDocumentFragment();
+  const target = document.getElementById("target");
+  const loadingGif = document.createElement("img");
+  const body = document.querySelectorAll("body");
   const firstDirectlyBelowBody = body.item(0); // body直下の1番目の要素
+  const overlay = document.getElementById("js-overlay");
+  const form = document.getElementById("js-form");
+  const submit = document.getElementById("js-submit");
 
   loadingGif.id = "loadingGif";
   loadingGif.className = "img__loading-circle";
@@ -23,28 +26,20 @@
 
   mainContent.appendChild(target);
 
-  function createModal(content) {
+  function createModal(content, login) {
     const modal = document.createElement("div");
     const inner = document.createElement("div");
 
     modal.className = "modal";
     modal.id = "modal";
     inner.className = "modal__inner";
-    inner.id        = "modalInner";
+    inner.id = "modalInner";
+    inner.appendChild(login);
     modal.appendChild(inner);
-
-    function closeButton() {
-      const btn = document.createElement("div");
-
-      btn.className = "modal__closeBtn";
-      btn.id = "modalCloseBtn";
-      modal.appendChild(btn);
-    }
-    closeButton();
 
     content.insertAdjacentElement("afterend", modal);
   }
-  createModal(mainContent);
+  createModal(mainContent, form);
 
   const modal = document.getElementById("modal");
   const modalInner = document.getElementById("modalInner");
@@ -52,50 +47,21 @@
 
   function createButton(name, inner = null, content = null) {
     const button = document.createElement("div");
-    const text   = document.createElement("p");
+    const text = document.createElement("p");
 
     button.className = `${name}Btn`;
-    button.id        = `${name}Btn`;
-    text.className   = `${name}Btn__text`;
+    button.id = `${name}Btn`;
+    text.className = `${name}Btn__text`;
     text.textContent = name;
     button.appendChild(text);
 
     if (name === "modal") {
       content.insertAdjacentElement("afterend", button);
-    } else if (name === "request") {
-      inner.insertAdjacentElement("beforeend", button);
     }
   }
-
   createButton("modal", null, mainContent);
-  createButton("request", modalInner);
 
-  const modalBtn   = document.getElementById("modalBtn");
-  const requestBtn = document.getElementById("requestBtn");
-
-  function createInput(inner) {
-    const input = document.createElement("input");
-
-    input.className = "modal__input";
-    input.id = "number";
-    input.setAttribute("type", "number");
-    input.setAttribute("value", "");
-    inner.insertAdjacentElement("afterbegin", input);
-  };
-  createInput(modalInner);
-
-  const modal__input = document.getElementById("number");
-
-  function createOverlay(content) {
-    const div = document.createElement("div");
-
-    div.className = "overlay";
-    div.id = "overlay";
-    content.insertAdjacentElement("afterend", div);
-  }
-  createOverlay(mainContent);
-
-  const overlay = document.getElementById("overlay");
+  const modalBtn = document.getElementById("modalBtn");
 
   function getInputValue(area) {
     const value = area.value;
@@ -117,6 +83,10 @@
 
   function addLoadingGif(gif, content) {
     content.insertAdjacentElement("afterend", gif);
+  }
+
+  function doSomething() {
+    
   }
 
   function createList(list, frag) {
@@ -156,22 +126,15 @@
     show(modal);
   });
 
-  modalCloseBtn.addEventListener("click", function () {
-    hidden(overlay);
-    hidden(modal);
-  });
-
   overlay.addEventListener("click", function () {
     hidden(overlay);
     hidden(modal);
   });
 
-  requestBtn.addEventListener("click", async function () {
-    removeButton(requestBtn);
+  submit.addEventListener("click", async function () {
     removeButton(modalBtn);
     hidden(overlay);
     hidden(modal);
-    getInputValue(modal__input);
     addLoadingGif(loadingGif, mainContent);
 
     const data = await postData(loadingGif);
