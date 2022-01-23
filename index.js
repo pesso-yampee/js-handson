@@ -7,7 +7,7 @@
   const firstDirectlyBelowBody = body.item(0); // body直下の1番目の要素
   const overlay = document.getElementById("js-overlay");
   const form = document.getElementById("js-form");
-  const submit = document.getElementById("js-submit");
+  const submitBtn = document.getElementById("js-submit");
 
   loadingGif.id = "loadingGif";
   loadingGif.className = "img__loading-circle";
@@ -42,10 +42,8 @@
   createModal(mainContent, form);
 
   const modal = document.getElementById("modal");
-  const modalInner = document.getElementById("modalInner");
-  const modalCloseBtn = document.getElementById("modalCloseBtn");
 
-  function createButton(name, inner = null, content = null) {
+  function createButton(name, content) {
     const button = document.createElement("div");
     const text = document.createElement("p");
 
@@ -59,34 +57,20 @@
       content.insertAdjacentElement("afterend", button);
     }
   }
-  createButton("modal", null, mainContent);
+  createButton("modal", mainContent);
 
   const modalBtn = document.getElementById("modalBtn");
 
-  function getInputValue(area) {
-    const value = area.value;
-
-    console.log(value);
-  }
-
-  function show(object) {
-    object.classList.add("js-show");
-  }
-
-  function hidden(object) {
-    object.classList.remove("js-show");
-  }
-
-  function removeButton(btn) {
-    btn.remove();
+  function toggleShow(object) {
+    if (object.classList.contains("active") === true) {
+      object.classList.remove("active");
+    } else {
+      object.classList.add("active");
+    }
   }
 
   function addLoadingGif(gif, content) {
     content.insertAdjacentElement("afterend", gif);
-  }
-
-  function doSomething() {
-    
   }
 
   function createList(list, frag) {
@@ -122,19 +106,19 @@
   }
 
   modalBtn.addEventListener("click", function () {
-    show(overlay);
-    show(modal);
+    toggleShow(overlay);
+    toggleShow(modal);
   });
 
   overlay.addEventListener("click", function () {
-    hidden(overlay);
-    hidden(modal);
+    toggleShow(overlay);
+    toggleShow(modal);
   });
 
-  submit.addEventListener("click", async function () {
-    removeButton(modalBtn);
-    hidden(overlay);
-    hidden(modal);
+  submitBtn.addEventListener("click", async function () {
+    modalBtn.remove();
+    toggleShow(overlay);
+    toggleShow(modal);
     addLoadingGif(loadingGif, mainContent);
 
     const data = await postData(loadingGif);
