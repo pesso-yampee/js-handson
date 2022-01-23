@@ -58,7 +58,7 @@ body {
   backdrop-filter: blur(5px);
   animation: overlayShow .3s linear 0s;
 }
-.overlay.js-show {
+.overlay.active {
   display: block;
 }
 
@@ -76,7 +76,7 @@ body {
   animation: modalShow .3s linear 0s;
 }
 
-.modal.js-show {
+.modal.active {
   display: block;
 }
 
@@ -124,6 +124,59 @@ body {
 .modal__closeBtn::after {
   transform: rotate(135deg);
 }
+
+/* ------------------
+  FORM
+-------------------*/
+.form {
+  display: inline-block;
+  margin: 0 auto;
+}
+
+.form__inner {
+  margin: 0 auto;
+  padding: 15px;
+}
+
+.form__body > dl {
+  display: flex;
+  justify-content: center;
+}
+
+.form__body > dl:first-of-type > dt {
+  text-indent: 3em;
+}
+
+.form__body > dl > dd {
+  display: flex;
+  align-items: center;
+}
+
+.form__body > dl > dd > input {
+  display: block;
+}
+.form__body > dl > dd > input:focus {
+  outline-color: #008000;
+}
+
+.form__head {
+  margin: 0;
+  text-align: center;
+}
+
+.form__btn--submit {
+  display: block;
+  margin-left: auto;
+  padding: 5px 15px;
+  background-color: #008000;
+  border: none;
+  color: #fff;
+  outline-color: #329932;
+}
+.form__btn--submit:hover {
+  background-color: #329932;
+}
+
 /* ------------------
   ANIMATION
 -------------------*/
