@@ -1,7 +1,3 @@
-html {
-  position: relative;
-}
-
 body {
   margin: 0;
   padding: 0;
@@ -62,14 +58,14 @@ body {
   backdrop-filter: blur(5px);
   animation: overlayShow .3s linear 0s;
 }
-.overlay.js-show {
+.overlay.active {
   display: block;
 }
 
 /* ------------------
   MODAL
 -------------------*/
-.modal__window {
+.modal {
   z-index: 100;
   position: fixed;
   display: none;
@@ -80,7 +76,7 @@ body {
   animation: modalShow .3s linear 0s;
 }
 
-.modal__window.js-show {
+.modal.active {
   display: block;
 }
 
@@ -97,14 +93,90 @@ body {
 }
 
 .modal__closeBtn {
-  border-color: #808080;
-  cursor: pointer;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  right: 0;
+  width: 30px;
+  height: 30px;
+  background-color: #fff;
+  border: 1px solid #808080;
   border-radius: 50%;
+  transform: translate(35%, -50%);
+  cursor: pointer;
 }
 
-.modal__closeBtn__line {
-  
+.modal__closeBtn::before,
+.modal__closeBtn::after {
+  position: absolute;
+  display: block;
+  height: 15px;
+  border: 1px solid #000;
+  content: "";
 }
+
+.modal__closeBtn::before {
+  transform: rotate(45deg);
+}
+
+.modal__closeBtn::after {
+  transform: rotate(135deg);
+}
+
+/* ------------------
+  FORM
+-------------------*/
+.form {
+  display: inline-block;
+  margin: 0 auto;
+}
+
+.form__inner {
+  margin: 0 auto;
+  padding: 15px;
+}
+
+.form__body > dl {
+  display: flex;
+  justify-content: center;
+}
+
+.form__body > dl:first-of-type > dt {
+  text-indent: 3em;
+}
+
+.form__body > dl > dd {
+  display: flex;
+  align-items: center;
+}
+
+.form__body > dl > dd > input {
+  display: block;
+}
+.form__body > dl > dd > input:focus {
+  outline-color: #008000;
+}
+
+.form__head {
+  margin: 0;
+  text-align: center;
+}
+
+.form__btn--submit {
+  display: block;
+  margin-left: auto;
+  padding: 5px 15px;
+  background-color: #008000;
+  border: none;
+  color: #fff;
+  outline-color: #329932;
+}
+.form__btn--submit:hover {
+  background-color: #329932;
+}
+
 /* ------------------
   ANIMATION
 -------------------*/

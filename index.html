@@ -5,10 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <link rel="stylesheet" href="./style.css" type="text/css" />
-    <title>handson-14</title>
+    <title>handson-15</title>
   </head>
   <body>
     <ul class="list" id="target"></ul>
+
+    <div class="overlay" id="js-overlay"></div>
+    <div class="form" id="js-form">
+      <div class="form__inner">
+        <form class="form__body" action="#" method="post">
+          <p class="form__head">ログイン</p>
+          <dl>
+            <dt><label for="name">名前</label></dt>
+            <dd><input type="text"></dd>
+          </dl>
+          <dl>
+            <dt><label for="password">パスワード</label></dt>
+            <dd><input type="password"></dd>
+          </dl>
+        </form>
+        <!-- 画面前更新を発生させないためには送信ボタンをformの外側に書く -->
+        <button class="form__btn--submit" id="js-submit" type="submit">送信</button>
+      </div><!-- ./form__inner -->
+    </div><!-- ./form -->
     <script src="./index.js"></script>
   </body>
 </html>
